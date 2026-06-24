@@ -1,0 +1,11 @@
+/////////////////////////////////////////////////////////
+///// This file does not need any modification, /////////
+///// if needed it can be extended //////////////////////
+///////////////////////////////////////////////////////// 
+#pragma once
+
+struct system_settings_t{
+  unsigned int off_track_detection;
+  unsigned int idle_speed;
+  bool plot_analog_readings;
+};
