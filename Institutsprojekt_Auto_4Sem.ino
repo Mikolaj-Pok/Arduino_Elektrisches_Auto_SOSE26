@@ -17,9 +17,9 @@ servo_settings_t servo = {
 
 //the entries should not rearranged (compiler error)
 motor_settings_t motor = {
-  .pin = 3,
-  .max_speed = 100,
-  .min_speed = 0
+  .pin = 3, 
+  .max_speed = 100, //values range from 0 to 255 but above 100, the battery tends to shut off because the current gets too high
+  .min_speed = 0 
 };
 
 //the entries should not rearranged (compiler error)
@@ -70,12 +70,12 @@ speed_sense_settings_t speed_sense = {
 };
 
 void setup() {
+  //setup functions which tell the program where the Inputs/Outputs are and what the parameters are
   setup_uart();
   servo_setup(servo);
   motor_setup(motor);
   sensor_setup(left_sensor);
   sensor_setup(right_sensor);
-  
   setup_speed_sense(speed_sense);
 
 }
@@ -83,11 +83,10 @@ void setup() {
 //interrupt for measuring speed from speed sensor
 void speed_interrupt() {
   //TODO
-  //mit attachInterrupt(digitalPinToInterrupt(pin), ISR, modus) unterbricht man den Programmablauf,
-  //um die geschwindigkeit zu messen, danach macht der Arduino normal weiter
+  // attachInterrupt(digitalPinToInterrupt(pin), ISR, modus) interrupts the code
+  // to measure the speed, continues the code afterwards
 
-  unsigned long current_time=micros(); //micros(): fragt die Zeit, die seit Programmstart vergangen ist, in Mikrosekunden ab.
-
+  unsigned long current_time=micros(); //micros(): return the passed time in microseconds since the start of the code
   speed_sense.time_diff=current_time-speed_sense.last_time;
   speed_sense.last_time=current_time;
 

@@ -12,5 +12,6 @@ float pid(pid_settings_t &s, float soll, float in) {
 void reset_integrator(pid_settings_t &s) {
   //code needs to be added here
 
+  s.i=0; //sets the integral sum-value back to zero
 
 }
