@@ -6,13 +6,13 @@ float pid(pid_settings_t &s, float soll, float in) {
   float current_error = soll - in;
   
   //Proportional part
-  float u_P = s.p * current_error;
+  float u_P = s.T * s.p * current_error;
   
   //Integral part
   
 
   //Differential part
-  float u_D = s.d * ((current_error-last_error)/T)
+  float u_D = s.d * ((current_error-last_error)/s.T)
 
   //PID 
   float pid = u_P + u_I + u_D;
