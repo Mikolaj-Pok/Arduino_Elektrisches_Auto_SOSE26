@@ -14,7 +14,7 @@ struct pid_settings_t{
 
   //custom variables
   float T;            //Abtastperiode
-  float sum_array     //Digitized Integral sum
+  float sum_array[];    //Digitized Integral sum
 };
 
 float pid(pid_settings_t &s, float soll, float in);
