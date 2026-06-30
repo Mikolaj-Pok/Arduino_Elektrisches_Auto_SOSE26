@@ -12,9 +12,6 @@ struct pid_settings_t{
   float integral;     //Integration variable (for i component)
   float last_error;   //Last calucalted error (For d component)
 
-  //custom variables
-  float T;            //Abtastperiode
-  float sum_array[];    //Digitized Integral sum
 };
 
 float pid(pid_settings_t &s, float soll, float in);
