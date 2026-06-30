@@ -7,13 +7,15 @@ Servo servo_object;
 
 void servo_setup(servo_settings_t &s) {
   //code needs to be added here
+  servo_object.attach(s.pin);
+  
   pinMode(s.pin, OUTPUT);
 }
 
 
 void servo_set_position(servo_settings_t &s, int pos) {
   //code needs to be added here
-
+servo_object.write(pos); 
 
 }
 
