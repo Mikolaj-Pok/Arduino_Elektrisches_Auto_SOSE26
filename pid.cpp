@@ -18,7 +18,7 @@ float pid(pid_settings_t &s, float soll, float in) {
   float pid = u_P + u_I + u_D;
 
   last_error = current_error;
-  reset_integrator(&s);
+
   //pid=s.p+s.i+s.d; so richtig?
   return pid;
 }
