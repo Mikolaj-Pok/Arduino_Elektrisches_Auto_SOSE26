@@ -8,7 +8,7 @@ Servo servo_object;
 void servo_setup(servo_settings_t &s) {
   //code needs to be added here
   servo_object.attach(s.pin);
-  sgvsgrsvfehtehtbehteht
+ 
   pinMode(s.pin, OUTPUT);
 }
 
@@ -22,6 +22,8 @@ void servo_set_position(servo_settings_t &s, int pos) {
 
 void servo_test(servo_settings_t &s) {
   //code needs to be added here
-  fahr nach links, setz wert, fahr nachts rechts, setzt wert, setz center in der mitte, fahr zu center
+  servo_object.writeMicroseconds(s.full_left);
+  servo_object.writeMicroseconds(s.full_right);
+  servo_object.writeMicroseconds(s.center);
   
 }
