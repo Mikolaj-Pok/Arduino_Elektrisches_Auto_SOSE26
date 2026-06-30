@@ -2,30 +2,30 @@
 
 float pid(pid_settings_t &s, float soll, float in) {
   //code needs to be added here
- float pid = 0.0;
+  float pid = 0.0;
   float current_error = soll - in;
-  
+  s.sum_error += current_error;
+
+
   //Proportional part
-  float u_P = s.T * s.p * current_error;
+  float u_P =  s.p * current_error;
   
   //Integral part
-  
+  float u_I = s.i * s.integral * s.sum_error;
 
   //Differential part
-  float u_D = s.d * ((current_error-last_error)/s.T)
+  float u_D = s.d * ((current_error-last_error)/s.integral);
 
   //PID 
   float pid = u_P + u_I + u_D;
 
-  last_error = current_error;
-
-  //pid=s.p+s.i+s.d; so richtig?
+  s.last_error = current_error;
+ 
   return pid;
 }
 
 void reset_integrator(pid_settings_t &s) {
   //code needs to be added here
-
-  s.i=0; //sets the integral sum-value back to zero
-
+  s.sum_error = 0.0;
+  s.last_error = 0.0;
 }
