@@ -32,5 +32,4 @@ void reset_integrator(pid_settings_t &s) {
   //code needs to be added here
   s.integral = 0.0;
   s.last_error = 0.0;
-}= 0.0;
 }
