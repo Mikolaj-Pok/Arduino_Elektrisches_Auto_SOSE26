@@ -23,7 +23,9 @@ void servo_set_position(servo_settings_t &s, int pos) {
 void servo_test(servo_settings_t &s) {
   //code needs to be added here
   servo_object.writeMicroseconds(s.full_left);
+  delay(1000);
   servo_object.writeMicroseconds(s.full_right);
+  delay(1000);
   servo_object.writeMicroseconds(s.center);
-  
+  delay(1000);  
 }
