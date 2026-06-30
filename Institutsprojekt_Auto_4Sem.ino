@@ -10,9 +10,9 @@
 //the entries should not rearranged (compiler error)
 servo_settings_t servo = {
   .pin = 0,
-  .full_left = 0,
-  .full_right = 0,
-  .center = 0,
+  .full_left = 1000,
+  .full_right = 2000,
+  .center = 1500,
 };
 
 //the entries should not rearranged (compiler error)
