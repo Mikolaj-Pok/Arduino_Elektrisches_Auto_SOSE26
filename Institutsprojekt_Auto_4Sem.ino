@@ -120,10 +120,10 @@ void loop() {
   float v_kmh = v_ms * 3.6;                       // km/h
 
   //the larger the current error, the slower the car should go
-  float v_soll = 100- 0,2 * aktueller_fehler;
+  float v_soll = motor.max_speed- 0,2 * aktueller_fehler;
   float geschwindigkeit = pid(speed_control, v_soll, v_km/h);
   
-  motor_set_speed(motor, 100);
+  motor_set_speed(motor, geschwindigkeit);
 
 
 
