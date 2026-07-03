@@ -9,7 +9,7 @@
 
 //the entries should not rearranged (compiler error)
 servo_settings_t servo = {
-  .pin = 0,
+  .pin = 5,
   .full_left = 1000,
   .full_right = 2000,
   .center = 1500,
@@ -24,23 +24,23 @@ motor_settings_t motor = {
 
 //the entries should not rearranged (compiler error)
 sensor_settings_t left_sensor = {
-  .pin = 0,
+  .pin = 3,
   .value = 0,
   .avg = {}
 };
 
 //the entries should not rearranged (compiler error)
 sensor_settings_t right_sensor = {
-  .pin = 1,
+  .pin = 2,
   .value = 0,
   .avg = {}
 };
 
 //the entries should not rearranged (compiler error)
 pid_settings_t direction_control = {
-  .p = 1.0,
-  .i = 0.0,
-  .d = 0.0,
+  .p = 0.005,
+  .i = 0,
+  .d = 0,
   .anti_windup = 5.0,
   .integral = 0.0,
   .last_error = 0.0
@@ -48,7 +48,7 @@ pid_settings_t direction_control = {
 
 //the entries should not rearranged (compiler error)
 pid_settings_t speed_control = {
-  .p = 1.0,
+  .p = 0.5,
   .i = 0.0,
   .d = 0.0,
   .anti_windup = 5.0,
@@ -104,7 +104,7 @@ void loop() {
 
   float lenkwinkel= 90 + direction;
 
-  constrain(lenkwinkel, 0, 180);
+  constrain(lenkwinkel, 0, 35); // wheels only spin bout 35 degrees from the center so we first try 35 as max so the servo does not brake
   
   servo_set_position(servo, lenkwinkel);
 
@@ -120,8 +120,8 @@ void loop() {
   float v_kmh = v_ms * 3.6;                       // km/h
 
   //the larger the current error, the slower the car should go
-  float v_soll = motor.max_speed- 0,2 * aktueller_fehler;
-  float geschwindigkeit = pid(speed_control, v_soll, v_km/h);
+  float v_soll = motor.max_speed- 0.2 * aktueller_fehler;
+  float geschwindigkeit = pid(speed_control, v_soll, v_kmh);
   
   motor_set_speed(motor, geschwindigkeit);
 
