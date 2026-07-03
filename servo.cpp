@@ -7,7 +7,7 @@ Servo servo_object;
 
 void servo_setup(servo_settings_t &s) {
   //code needs to be added here
-  servo_object.attach(s.pin);
+  servo_object.attach(s.pin,s.full_left,s.full_right);
  
   pinMode(s.pin, OUTPUT);
 }

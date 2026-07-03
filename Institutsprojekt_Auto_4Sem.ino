@@ -94,9 +94,18 @@ void speed_interrupt() {
 
 void loop() {
 
-  //code needs to be added here
-  
-  float direction = 0;
+  sensor_read(left_sensor);
+  sensor_read(right_sensor);
+
+  float aktueller_fehler = left_sensor.value - right_sensor.value;
+
+  float direction = pid(direction_control, 0.0, aktueller_fehler);
+
+  servo_set_position(servo, servo.center+(direction/max_winkel)*(servo.full_right-servo.center));
+
+  motor_set_speed(motor, 100);
+
+
 
   if (settings.plot_analog_readings) {
     Serial.print("Left_avg:");
