@@ -38,10 +38,10 @@ sensor_settings_t right_sensor = {
 
 //the entries should not rearranged (compiler error)
 pid_settings_t direction_control = {
-  .p = 0.0,
+  .p = 1.0,
   .i = 0.0,
   .d = 0.0,
-  .anti_windup = 0.0,
+  .anti_windup = 5.0,
   .integral = 0.0,
   .last_error = 0.0
 };
@@ -51,7 +51,7 @@ pid_settings_t speed_control = {
   .p = 1.0,
   .i = 0.0,
   .d = 0.0,
-  .anti_windup = 0.0,
+  .anti_windup = 5.0,
   .integral = 0.0,
   .last_error = 0.0
 };
