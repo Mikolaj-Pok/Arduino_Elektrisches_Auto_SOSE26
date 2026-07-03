@@ -101,7 +101,11 @@ void loop() {
 
   float direction = pid(direction_control, 0.0, aktueller_fehler);
 
-  servo_set_position(servo, servo.center+(direction/max_winkel)*(servo.full_right-servo.center));
+  float lenkwinkel= 90 + direction;
+
+  constrain(lenkwinkel, 0, 180);
+  
+  servo_set_position(servo, lenkwinkel);
 
   motor_set_speed(motor, 100);
 
