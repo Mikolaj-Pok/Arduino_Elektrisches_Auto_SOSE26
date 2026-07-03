@@ -96,6 +96,7 @@ void loop() {
 
   sensor_read(left_sensor);
   sensor_read(right_sensor);
+  speed_interrupt();
 
   float aktueller_fehler = left_sensor.value - right_sensor.value;
 
@@ -107,6 +108,21 @@ void loop() {
   
   servo_set_position(servo, lenkwinkel);
 
+
+  //calculate Speed in km/h
+  if (speed_sense.time_diff == 0) return 0.0;
+
+  float period_s = speed_sense.time_diff / 1e6;   // micros → seconds
+  float freq = 1.0 / period_s;                    // Hz
+
+  const float radumfang = 0.1885;                 // Meter per rotation
+  float v_ms = freq * radumfang;                  // m/s
+  float v_kmh = v_ms * 3.6;                       // km/h
+
+  //the larger the current error, the slower the car should go
+  float v_soll = 100- 0,2 * aktueller_fehler;
+  float geschwindigkeit = pid(speed_control, v_soll, v_km/h);
+  
   motor_set_speed(motor, 100);
 
 
