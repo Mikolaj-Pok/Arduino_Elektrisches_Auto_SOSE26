@@ -34,5 +34,4 @@ void reset_integrator(pid_settings_t &s) {
   s.integral=0.0; //sets the integral sum-value back to zero
   s.last_error=0.0; //resets the error
 
->>>>>>> a4d30ec6a85848f8f383103652b488d3a89bbb80
 }
