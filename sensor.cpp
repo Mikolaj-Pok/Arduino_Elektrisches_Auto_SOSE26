@@ -32,6 +32,6 @@ void sensor_read(sensor_settings_t &s) {
     s.avg.pos =0; // if the end is reached, return to the beginning of the array
   }
 
-  s.value= (float)s.avg.sum/(float)AVG_SIZE; //calculate the sensor value
+  s.value= s.avg.sum/AVG_SIZE; //calculate the sensor value
 
 }
