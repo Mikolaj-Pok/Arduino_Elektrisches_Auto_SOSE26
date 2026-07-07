@@ -10,9 +10,9 @@
 //the entries should not rearranged (compiler error)
 servo_settings_t servo = {
   .pin = 5,
-  .full_left = 50.0,
-  .full_right = 90.0,
-  .center = 70.0
+  .full_left = 70,
+  .full_right = 110,
+  .center = 90
 };
 
 //the entries should not rearranged (compiler error)
@@ -60,7 +60,7 @@ pid_settings_t speed_control = {
 system_settings_t settings = {
   .off_track_detection = 0,
   .idle_speed = 0,
-  .plot_analog_readings = false
+  .plot_analog_readings = true
 };
 
 speed_sense_settings_t speed_sense = {
@@ -95,10 +95,10 @@ void setup() {
 
 float aktueller_fehler= 0.0;
 float direction= 0.0;
-float lenkwinkel= 0.0;
+float lenkwinkel= 90.0;
 
 void loop() {
-  
+/*
   motor_set_speed(motor, motor.max_speed);
 
   sensor_read(left_sensor);
@@ -108,11 +108,12 @@ void loop() {
 
   direction = pid(direction_control, 0.0, aktueller_fehler);
 
-  lenkwinkel= 70.0 + direction;
+  lenkwinkel= servo.center + direction;
 
-  lenkwinkel= constrain(lenkwinkel, 40.0, 100.0);
+  lenkwinkel= constrain(lenkwinkel, servo.full_left, servo.full_right);
   
   servo_set_position(servo, lenkwinkel);
+*/
 
 /*
   float v_ms=0.0;
@@ -137,7 +138,7 @@ void loop() {
 
 
   if (settings.plot_analog_readings) {
-    /*Serial.print("Left_avg:");
+    Serial.print("Left_avg:");
     Serial.print(left_sensor.value);
     Serial.print(",Right_avg:");
     Serial.print(right_sensor.value);
@@ -148,11 +149,11 @@ void loop() {
     Serial.print('\n');
     //Serial.print(",Controller:");
     //Serial.print(direction);
-    //Serial.println("");*/
-    Serial.print("Speed:");
-    Serial.print(digitalRead(speed_sense.pin));
-    Serial.print('\n');
-    delay(500);
+    //Serial.println("");
+    //Serial.print("Speed:");
+    //Serial.print(digitalRead(speed_sense.pin));
+    //Serial.print('\n');
+    delay(50);
   }
 
   //code needs to be added here

@@ -1,6 +1,6 @@
 //This file needs value modifications
 #pragma once
-#define AVG_SHIFT 0 //Muss evtl. modifiziert werden
+#define AVG_SHIFT 3 //Muss evtl. modifiziert werden
 #define AVG_SIZE (1<<(AVG_SHIFT)) 
 
 struct moving_average{
