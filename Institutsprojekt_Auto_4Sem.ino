@@ -114,15 +114,16 @@ void loop() {
   //calculate Speed in km/h
   if (speed_sense.time_diff > 0) {
   float period_s = speed_sense.time_diff / 1000000;   // micros → seconds
-  float freq = 1.0 / period_s;                    // Hz
-  const float radumfang = 0.1885;                 // Meter per rotation
-  
+  float freq = 1.0 / period_s;                        // Hz
+  const float radumfang = 0.1885;                     // Meter per rotation
+
   v_ms = freq * radumfang;                  // m/s
   v_kmh = v_ms * 3.6;                       // km/h
   }
 
   //the larger the current error, the slower the car should go
-  float v_soll = motor.max_speed- 0.2 * abs(aktueller_fehler);
+  float v_soll = motor.max_speed - 0.02 * abs(aktueller_fehler);
+  constrain(v_soll, motor.min_speed, motor.max_speed);
   float geschwindigkeit = pid(speed_control, v_soll, v_kmh);
   
   motor_set_speed(motor, geschwindigkeit);
