@@ -18,7 +18,7 @@ void sensor_setup(sensor_settings_t &s) {
 void sensor_read(sensor_settings_t &s) {
   //code needs to be added here
 
-  s.avg.sum = s.avg.sum - (s.avg.measurements[s.avg.pos]??0); // deletes the oldest value in the sum to make space for a new measurement
+  s.avg.sum = s.avg.sum - s.avg.measurements[s.avg.pos]; // deletes the oldest value in the sum to make space for a new measurement
 
   unsigned int new_measurement = analogRead(s.pin); // new measurement from the sensor pin is saved in a variable
 

@@ -147,12 +147,12 @@ void loop() {
     Serial.print(",Right:");
     Serial.print(analogRead(right_sensor.pin));
     Serial.print('\n');
-    Serial.print(",Controller:");
+   /* Serial.print(",Controller:");
     Serial.print(direction);
     Serial.println("");
     Serial.print("Speed:");
     Serial.print(digitalRead(speed_sense.pin));
-    Serial.print('\n');
+    Serial.print('\n'); */
     delay(50);
   }
 
