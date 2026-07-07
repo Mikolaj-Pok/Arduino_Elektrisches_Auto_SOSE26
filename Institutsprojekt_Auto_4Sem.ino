@@ -10,9 +10,9 @@
 //the entries should not rearranged (compiler error)
 servo_settings_t servo = {
   .pin = 5,
-  .full_left = 1300,
-  .full_right = 1700,
-  .center = 1500,
+  .full_left = 40,
+  .full_right = 100,
+  .center = 70
 };
 
 //the entries should not rearranged (compiler error)
@@ -60,7 +60,7 @@ pid_settings_t speed_control = {
 system_settings_t settings = {
   .off_track_detection = 0,
   .idle_speed = 0,
-  .plot_analog_readings = false
+  .plot_analog_readings = true
 };
 
 speed_sense_settings_t speed_sense = {
@@ -77,6 +77,7 @@ void setup() {
   sensor_setup(left_sensor);
   sensor_setup(right_sensor);
   setup_speed_sense(speed_sense);
+  uart_attach_servo(servo);
 
 }
 
@@ -89,25 +90,25 @@ void speed_interrupt() {
   unsigned long current_time=micros(); //micros(): return the passed time in microseconds since the start of the code
   speed_sense.time_diff=current_time-speed_sense.last_time;
   speed_sense.last_time=current_time;
+  Serial.print("speed_interrupt aufgerufen");
 
 }
 
 void loop() {
-
+  /*
   sensor_read(left_sensor);
   sensor_read(right_sensor);
-  speed_interrupt();
 
-  float aktueller_fehler = left_sensor.value - right_sensor.value;
+  float aktueller_fehler = left_sensor.value - right_sensor.value; //maximum value = 8
 
   float direction = pid(direction_control, 0.0, aktueller_fehler);
 
-  float lenkwinkel= 90 + direction;
+  float lenkwinkel= 70 + direction;
 
-  constrain(lenkwinkel, 55, 125); // wheels only spin bout 35 degrees from the center so we first try 35 as max so the servo does not brake
+  constrain(lenkwinkel, 40, 100); // wheels only spin bout 35 degrees from the center so we first try 35 as max so the servo does not brake
   
   servo_set_position(servo, lenkwinkel);
-
+  */
 
   float v_ms=0;
   float v_kmh=0;
@@ -120,18 +121,17 @@ void loop() {
   v_ms = freq * radumfang;                  // m/s
   v_kmh = v_ms * 3.6;                       // km/h
   }
-
+/*
   //the larger the current error, the slower the car should go
   float v_soll = motor.max_speed - 0.02 * abs(aktueller_fehler);
   constrain(v_soll, motor.min_speed, motor.max_speed);
   float geschwindigkeit = pid(speed_control, v_soll, v_kmh);
   
   motor_set_speed(motor, geschwindigkeit);
-
-
+*/
 
   if (settings.plot_analog_readings) {
-    Serial.print("Left_avg:");
+    /*Serial.print("Left_avg:");
     Serial.print(left_sensor.value);
     Serial.print(",Right_avg:");
     Serial.print(right_sensor.value);
@@ -139,10 +139,14 @@ void loop() {
     Serial.print(analogRead(left_sensor.pin));
     Serial.print(",Right:");
     Serial.print(analogRead(right_sensor.pin));
-    Serial.print(",Controller:");
-    Serial.print(direction);
-    Serial.println("");
-    delay(50);
+    Serial.print('\n');
+    //Serial.print(",Controller:");
+    //Serial.print(direction);
+    //Serial.println("");*/
+    Serial.print("Speed:");
+    Serial.print(v_ms);
+    Serial.print('\n');
+    delay(500);
   }
 
   //code needs to be added here
