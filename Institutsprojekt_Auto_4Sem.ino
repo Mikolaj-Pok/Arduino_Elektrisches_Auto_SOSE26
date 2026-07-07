@@ -78,7 +78,7 @@ void setup() {
   sensor_setup(right_sensor);
   setup_speed_sense(speed_sense);
   uart_attach_servo(servo);
-
+  motor_set_speed(motor, motor.max_speed);
 }
 
 //interrupt for measuring speed from speed sensor
@@ -99,7 +99,7 @@ float lenkwinkel= 90.0;
 
 void loop() {
 
-  motor_set_speed(motor, motor.max_speed);
+ 
 
   sensor_read(left_sensor);
   sensor_read(right_sensor);
