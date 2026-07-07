@@ -76,13 +76,13 @@ void setup() {
   motor_setup(motor);
   sensor_setup(left_sensor);
   sensor_setup(right_sensor);
-  //setup_speed_sense(speed_sense);
+  setup_speed_sense(speed_sense);
   uart_attach_servo(servo);
 
 }
 
 //interrupt for measuring speed from speed sensor
-/*void speed_interrupt() {
+void speed_interrupt() {
   //TODO
   // attachInterrupt(digitalPinToInterrupt(pin), ISR, modus) interrupts the code
   // to measure the speed, continues the code afterwards
@@ -91,14 +91,14 @@ void setup() {
   speed_sense.time_diff=current_time-speed_sense.last_time;
   speed_sense.last_time=current_time;
 
-}*/
+}
 
 float aktueller_fehler= 0.0;
 float direction= 0.0;
 float lenkwinkel= 90.0;
 
 void loop() {
-/*
+
   motor_set_speed(motor, motor.max_speed);
 
   sensor_read(left_sensor);
@@ -113,9 +113,9 @@ void loop() {
   lenkwinkel= constrain(lenkwinkel, servo.full_left, servo.full_right);
   
   servo_set_position(servo, lenkwinkel);
-*/
 
-/*
+
+
   float v_ms=0.0;
   float v_kmh=0.0;
   //calculate Speed in km/h
@@ -127,14 +127,14 @@ void loop() {
   v_ms = freq * radumfang;                  // m/s
   v_kmh = v_ms * 3.6;                       // km/h
   }
-*/
+
 
   //the larger the current error, the slower the car should go
- /* float v_soll = motor.max_speed - 0.02 * abs(aktueller_fehler);
+  float v_soll = motor.max_speed - 0.02 * abs(aktueller_fehler);
   v_soll=constrain(v_soll, motor.min_speed, motor.max_speed);
   float geschwindigkeit = pid(speed_control, v_soll, v_kmh); */
   
- // motor_set_speed(motor, motor.max_speed);
+ motor_set_speed(motor, motor.max_speed);
 
 
   if (settings.plot_analog_readings) {
@@ -147,12 +147,12 @@ void loop() {
     Serial.print(",Right:");
     Serial.print(analogRead(right_sensor.pin));
     Serial.print('\n');
-    //Serial.print(",Controller:");
-    //Serial.print(direction);
-    //Serial.println("");
-    //Serial.print("Speed:");
-    //Serial.print(digitalRead(speed_sense.pin));
-    //Serial.print('\n');
+    Serial.print(",Controller:");
+    Serial.print(direction);
+    Serial.println("");
+    Serial.print("Speed:");
+    Serial.print(digitalRead(speed_sense.pin));
+    Serial.print('\n');
     delay(50);
   }
 
