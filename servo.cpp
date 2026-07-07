@@ -15,7 +15,7 @@ void servo_setup(servo_settings_t &s) {
 
 void servo_set_position(servo_settings_t &s, int pos) {
   //code needs to be added here
-  int micro_pos = s.full_left + (s.full_right - s.full_left) * pos/180;
+  int micro_pos = map(pos, 0, 180, s.full_left, s.full_right);
   servo_object.writeMicroseconds(micro_pos); 
 
 }
