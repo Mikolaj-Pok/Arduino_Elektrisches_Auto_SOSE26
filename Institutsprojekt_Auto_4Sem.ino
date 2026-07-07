@@ -64,7 +64,7 @@ system_settings_t settings = {
 };
 
 speed_sense_settings_t speed_sense = {
-  .pin = A1,
+  .pin = 2,
   .time_diff = 0,
   .last_time = 0
 };
