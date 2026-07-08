@@ -80,8 +80,8 @@ void setup() {
   uart_attach_servo(servo);
   uart_attach_settings(settings);
   uart_attach_motor(motor);
- 
- // motor_set_speed(motor, motor.max_speed); //starts the motor once
+  unsigned int v_last = motor.max_speed;
+  motor_set_speed(motor, v_last); //starts the motor once
 }
 
 //interrupt for measuring speed from speed sensor
@@ -132,15 +132,16 @@ void loop() {
   v_ms = freq * radumfang;                  // m/s
   v_kmh = v_ms * 3.6;                       // km/h
   }
-
+*/
 
   //the larger the current error, the slower the car should go
   float v_soll = motor.max_speed - 0.5 * abs(aktueller_fehler);
   v_soll=constrain(v_soll, motor.min_speed, motor.max_speed);
-  float geschwindigkeit = pid(speed_control, v_soll, v_kmh);
+  float geschwindigkeit = pid(speed_control, v_soll, v_last);
   
- motor_set_speed(motor, geschwindigkeit);
-*/
+  motor_set_speed(motor, geschwindigkeit);
+  v_last = geschwindigkeit; 
+
 
   if (settings.plot_analog_readings) {
     sensor_read(left_sensor);
