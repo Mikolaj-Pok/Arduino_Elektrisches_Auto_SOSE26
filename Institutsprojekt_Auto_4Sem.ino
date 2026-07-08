@@ -107,7 +107,10 @@ void loop() {
   sensor_read(right_sensor);
 
   aktueller_fehler = (float)left_sensor.value - (float)right_sensor.value; //maximum value ~  8 ; float cast solves underflow with unsigned floats
-
+  if(aktueller_fehler < 2.0){
+    aktueller_fehler = 0.0;
+      }
+  
   direction = pid(direction_control, 0.0, aktueller_fehler);
 
   lenkwinkel= servo.center + direction;
