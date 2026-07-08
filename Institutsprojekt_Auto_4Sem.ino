@@ -38,7 +38,7 @@ sensor_settings_t right_sensor = {
 
 //the entries should not rearranged (compiler error)
 pid_settings_t direction_control = {
-  .p = 0.5,
+  .p = 2.5,
   .i = 0,
   .d = 0,
   .anti_windup = 50.0,
@@ -78,7 +78,10 @@ void setup() {
   sensor_setup(right_sensor);
   setup_speed_sense(speed_sense);
   uart_attach_servo(servo);
-  motor_set_speed(motor, motor.max_speed);
+  uart_attach_settings(settings);
+  uart_attach_motor(motor);
+ 
+ // motor_set_speed(motor, motor.max_speed); //starts the motor once
 }
 
 //interrupt for measuring speed from speed sensor
@@ -100,11 +103,10 @@ float lenkwinkel= 90.0;
 void loop() {
 
  
-
   sensor_read(left_sensor);
   sensor_read(right_sensor);
 
-  aktueller_fehler = left_sensor.value - right_sensor.value; //maximum value = 8
+  aktueller_fehler = (float)left_sensor.value - (float)right_sensor.value; //maximum value ~  8 ; float cast solves underflow with unsigned floats
 
   direction = pid(direction_control, 0.0, aktueller_fehler);
 
@@ -115,7 +117,7 @@ void loop() {
   servo_set_position(servo, lenkwinkel);
 
 
-
+/*
   float v_ms=0.0;
   float v_kmh=0.0;
   //calculate Speed in km/h
@@ -130,16 +132,18 @@ void loop() {
 
 
   //the larger the current error, the slower the car should go
-  float v_soll = motor.max_speed - 0.02 * abs(aktueller_fehler);
+  float v_soll = motor.max_speed - 0.5 * abs(aktueller_fehler);
   v_soll=constrain(v_soll, motor.min_speed, motor.max_speed);
-  float geschwindigkeit = pid(speed_control, v_soll, v_kmh); */
+  float geschwindigkeit = pid(speed_control, v_soll, v_kmh);
   
- motor_set_speed(motor, motor.max_speed);
-
+ motor_set_speed(motor, geschwindigkeit);
+*/
 
   if (settings.plot_analog_readings) {
+    sensor_read(left_sensor);
     Serial.print("Left_avg:");
     Serial.print(left_sensor.value);
+    sensor_read(right_sensor);
     Serial.print(",Right_avg:");
     Serial.print(right_sensor.value);
     Serial.print(",Left:");

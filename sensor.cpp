@@ -8,12 +8,12 @@ void sensor_setup(sensor_settings_t &s) {
   pinMode(s.pin, INPUT);
   s.avg.pos=0; //position in measurment-array set to zero
   s.avg.sum=0; //sum of values set to zero
-  unsigned int first = analogRead(s.pin);
   for (int i=0; i < AVG_SIZE ; i++){
-    s.avg.measurements[i]=first; //fills the measurments-array with zeros 
+    s.avg.measurements[i]=0; //fills the measurments-array with zeros 
   } 
- s.avg.sum = first * AVG_SIZE;
 }
+
+// SO LASSEN, ES FUNKTIONIERT!!!!
 
 void sensor_read(sensor_settings_t &s) {
   //code needs to be added here
@@ -32,6 +32,6 @@ void sensor_read(sensor_settings_t &s) {
     s.avg.pos =0; // if the end is reached, return to the beginning of the array
   }
 
-  s.value= s.avg.sum/AVG_SIZE; //calculate the sensor value
+  s.value= s.avg.sum / AVG_SIZE; //calculate the sensor value without "[...]/AVG_SIZE"
 
 }

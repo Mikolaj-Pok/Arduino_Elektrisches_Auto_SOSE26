@@ -13,8 +13,11 @@ float pid(pid_settings_t &s, float soll, float in) {
   
   //Integral part
   float u_I = s.i * s.integral ;
-   if (u_I > s.anti_windup){
+  if (u_I > s.anti_windup){
     u_I = s.anti_windup;
+  }
+  else if (u_I < -s.anti_windup) {
+    u_I = -s.anti_windup;
   }
 
   //Differential part
