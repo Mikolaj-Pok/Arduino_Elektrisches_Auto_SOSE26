@@ -10,16 +10,16 @@
 //the entries should not rearranged (compiler error)
 servo_settings_t servo = {
   .pin = 5,
-  .full_left = 70,
-  .full_right = 110,
+  .full_left = 50,
+  .full_right = 130,
   .center = 90
 };
 
 //the entries should not rearranged (compiler error)
 motor_settings_t motor = {
   .pin = 3, 
-  .max_speed = 20.0, //values range from 0 to 255 but above 100, the battery tends to shut off because the current gets too high
-  .min_speed = 0 
+  .max_speed = 50.0, //values range from 0 to 255 but above 100, the battery tends to shut off because the current gets too high
+  .min_speed = 15.0 
 };
 
 //the entries should not rearranged (compiler error)
@@ -38,9 +38,9 @@ sensor_settings_t right_sensor = {
 
 //the entries should not rearranged (compiler error)
 pid_settings_t direction_control = {
-  .p = 2.5,
+  .p = 3.5,
   .i = 0.0,
-  .d = 1.0,
+  .d = 2.0,
   .anti_windup = 50.0, //egal, integral unbenutzt
   .integral = 0.0,
   .last_error = 0.0
@@ -60,7 +60,7 @@ pid_settings_t speed_control = {
 system_settings_t settings = {
   .off_track_detection = 0,
   .idle_speed = 0,
-  .plot_analog_readings = true
+  .plot_analog_readings = false
 };
 
 speed_sense_settings_t speed_sense = {
@@ -97,10 +97,13 @@ void speed_interrupt() {
 float aktueller_fehler= 0.0;
 float direction= 0.0;
 float lenkwinkel= 90.0;
-unsigned int v_soll=0;
-unsigned int geschwindigkeit=0.0;
-unsigned int v_last = motor.max_speed;
-
+int v_soll= (int) motor.max_speed;
+//float geschwindigkeit=0.0;
+//float v_last = motor.max_speed;
+float fehler_betrag=0.0;
+float letzter_fehler_betrag = 0.0;
+float fehler_aenderung=0.0;
+float bremskraft=0.0;
 
 void loop() {
 
@@ -109,9 +112,8 @@ void loop() {
   sensor_read(right_sensor);
 
   aktueller_fehler = (float)left_sensor.value - (float)right_sensor.value; //maximum value ~  8 ; float cast solves underflow with unsigned floats
-  if(abs(aktueller_fehler) < 2.0){
+  if(abs(aktueller_fehler) < 1.0){
     aktueller_fehler = 0.0;  //Threshold for minimal errors, shall prevent jittering
-    reset_integrator(speed_control);
       }
   
   direction = pid(direction_control, 0.0, aktueller_fehler);
@@ -122,6 +124,33 @@ void loop() {
   
   servo_set_position(servo, lenkwinkel);
 
+aktueller_fehler = (float)left_sensor.value - (float)right_sensor.value;
+if(abs(aktueller_fehler) < 2.0){
+    aktueller_fehler = 0.0;
+}
+
+fehler_betrag = abs(aktueller_fehler);
+
+fehler_aenderung = fehler_betrag - letzter_fehler_betrag;
+if (fehler_aenderung < 0) {
+    fehler_aenderung = 0; 
+}
+
+bremskraft = (1.5 * fehler_betrag) + (3.5 * fehler_aenderung); // P- und D-Teil
+
+v_soll = (int)(motor.max_speed - bremskraft);
+v_soll = constrain(v_soll, (int)motor.min_speed, (int)motor.max_speed);
+
+motor_set_speed(motor, (unsigned int)v_soll);
+
+letzter_fehler_betrag = fehler_betrag;
+
+/* ZWISCHEINSPEICHER LETZTER CODE
+  //the larger the current error, the slower the car should go
+  v_soll = (int) (motor.max_speed - 3 * abs(aktueller_fehler));
+  v_soll = constrain(v_soll, (int) motor.min_speed, (int) motor.max_speed);
+  motor_set_speed(motor, (unsigned int) v_soll);
+*/
 
 /*
   float v_ms=0.0;
@@ -136,14 +165,12 @@ void loop() {
   v_kmh = v_ms * 3.6;                       // km/h
   }
 */
-
-  //the larger the current error, the slower the car should go
-  v_soll = motor.max_speed - 1.0 * abs(aktueller_fehler);
-  v_soll = constrain(v_soll, motor.min_speed, motor.max_speed);
+  /*
+  v_soll = constrain(v_soll, (float) motor.min_speed, (float)motor.max_speed);
   geschwindigkeit = pid(speed_control, v_soll, v_last);
-  
-  motor_set_speed(motor, geschwindigkeit);
+  geschwindigkeit = constrain(geschwindigkeit, (float) motor.min_speed, (float) motor.max_speed);
   v_last = geschwindigkeit; 
+  */
 
 
   if (settings.plot_analog_readings) {
@@ -162,7 +189,7 @@ void loop() {
     Serial.print(" ,Fehler");
     Serial.print(aktueller_fehler);
     Serial.print(" ,Geschwindigkeit");
-    Serial.print(geschwindigkeit);
+    Serial.print(v_soll);
     Serial.println("");
     /* Serial.print("Speed:");
     Serial.print(digitalRead(speed_sense.pin));
